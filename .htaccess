@@ -1,0 +1,22 @@
+RewriteEngine On
+
+# Redirigir la raíz del proyecto a la carpeta pública sin crear bucles.
+RewriteCond %{REQUEST_URI} ^/MAX/?$ [NC]
+RewriteRule ^ /MAX/public/ [R=302,L]
+
+RewriteCond %{REQUEST_URI} ^/MAX/(.*)$ [NC]
+RewriteCond %{REQUEST_URI} !^/MAX/public/ [NC]
+RewriteRule ^ /MAX/public/%1 [R=302,L]
+
+# Seguridad básica
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "DENY"
+    Header always set Referrer-Policy "no-referrer"
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+</IfModule>
+
+# Ocultar archivos sensibles
+<FilesMatch "^(\.env|composer\.json|composer\.lock|README\.md)$">
+    Require all denied
+</FilesMatch>
