@@ -29,20 +29,20 @@ $router->add('GET', '/', static function (): void {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#eef2ef">
-    <meta name="description" content="MAX Security coordina prevención, rutas seguras y protección civil para empresas y comunidades.">
-    <title>MAX Security | Protección civil y prevención</title>
+    <meta name="theme-color" content="#1d506b">
+    <meta name="description" content="MAX Asesoría Empresarial Especializada. Asesoría, programas internos, capacitación y dictámenes técnicos.">
+    <title>MAX | Asesoría Empresarial Especializada</title>
     <style>
         :root {
             color-scheme: light;
-            --ink: #25343a;
-            --muted: #5e6d70;
+            --ink: #27343c;
+            --muted: #626d72;
             --paper: #eef2ef;
             --white: #fff;
-            --green: #35675d;
-            --green-bright: #e5b45e;
+            --green: #1d506b;
+            --green-bright: #edc33f;
             --line: #d4ded9;
-            --alert: #b75c42;
+            --alert: #c3443b;
             --serif: Georgia, "Times New Roman", serif;
             --sans: "Segoe UI", Tahoma, sans-serif;
         }
@@ -68,6 +68,9 @@ $router->add('GET', '/', static function (): void {
         }
         .nav { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
         .brand { display: inline-flex; align-items: center; }
+        .brand-lockup { display: inline-flex; align-items: center; gap: 11px; }
+        .brand-lockup strong { color: var(--green); font-size: 1.25rem; font-weight: 800; }
+        .brand-lockup span { max-width: 165px; color: #a77b56; font-size: .59rem; font-weight: 800; line-height: 1.3; }
         .brand-logo { display: block; width: 74px; height: 54px; object-fit: contain; }
         .nav-links { display: flex; align-items: center; gap: 28px; color: #45534d; font-size: .9rem; }
         .nav-links a { transition: color .2s ease; }
@@ -87,14 +90,14 @@ $router->add('GET', '/', static function (): void {
         .btn-primary { background: var(--green); color: white; }
         .btn-primary:hover { background: #0e553a; }
         .btn-secondary { border-color: #c4cec5; color: var(--ink); }
-        .hero-visual { min-height: 420px; position: relative; overflow: hidden; background: #18372c; }
-        .hero-visual img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .76; }
-        .visual-shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(11, 33, 25, .05) 20%, rgba(11, 33, 25, .78) 100%); }
+        .hero-visual { min-height: 420px; position: relative; overflow: hidden; background: #1d4052; }
+        .hero-visual img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .9; }
+        .visual-shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(14, 38, 53, .02) 20%, rgba(14, 38, 53, .78) 100%); }
         .visual-label { position: absolute; right: 22px; bottom: 22px; left: 22px; display: flex; align-items: end; justify-content: space-between; gap: 20px; color: white; }
         .visual-label strong { display: block; margin-bottom: 5px; font-family: var(--serif); font-size: 1.7rem; font-weight: 400; }
         .visual-label span { color: #d6e3db; font-size: .83rem; }
-        .status { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 8px; padding: 9px 11px; border: 1px solid rgba(255,255,255,.3); border-radius: 3px; background: rgba(17, 43, 32, .55); font-size: .72rem; }
-        .status::before { width: 7px; height: 7px; border-radius: 50%; content: ""; background: var(--green-bright); box-shadow: 0 0 0 4px rgba(184,239,112,.15); }
+        .status { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 8px; padding: 9px 11px; border: 1px solid rgba(255,255,255,.3); border-radius: 3px; background: rgba(14, 38, 53, .62); font-size: .72rem; }
+        .status::before { width: 7px; height: 7px; border-radius: 50%; content: ""; background: var(--green-bright); box-shadow: 0 0 0 4px rgba(237,195,63,.2); }
         .trust-band { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
         .trust-inner { min-height: 98px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
         .trust-inner p { max-width: 270px; margin: 0; color: var(--muted); font-size: .88rem; line-height: 1.55; }
@@ -214,23 +217,6 @@ $router->add('GET', '/', static function (): void {
         .sample-note { grid-column: 1 / -1; margin: 0 !important; color: var(--muted) !important; font-size: .72rem; text-align: center; }
         .view-tabs { display: none; }
         .view-content { padding-top: 12px; }
-        .map-visual { background: #e4ebe5; }
-        .map-visual > svg { position: absolute; inset: 0; width: 100%; height: 100%; }
-        .map-road-edge, .map-road, .map-grid-lines { fill: none; stroke-linecap: round; stroke-linejoin: round; }
-        .map-road-edge { stroke: #cbd5cf; }
-        .map-road { stroke: #fff; }
-        .map-grid-lines { stroke: #bccbc0; stroke-width: 2; }
-        .map-route { fill: none; stroke: var(--alert); stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 2 1; }
-        .map-legend { position: absolute; top: 16px; left: 16px; display: grid; gap: 7px; padding: 11px 13px; border: 1px solid rgba(37, 52, 58, .12); background: rgba(250, 252, 249, .94); color: var(--ink); font-size: .72rem; box-shadow: 0 5px 16px rgba(37, 52, 58, .08); }
-        .map-legend strong { font-size: .78rem; }
-        .map-legend span { display: flex; align-items: center; gap: 7px; color: var(--muted); }
-        .map-key { width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
-        .map-key.alert { background: var(--alert); }
-        .map-disclaimer { position: absolute; top: 16px; right: 16px; padding: 7px 9px; border: 1px solid rgba(37, 52, 58, .13); background: rgba(250, 252, 249, .9); color: var(--muted); font-size: .65rem; }
-        .map-visual .visual-shade { background: linear-gradient(180deg, transparent 50%, rgba(37, 52, 58, .7) 100%); }
-        .map-pin { fill: var(--alert); stroke: #fff; stroke-width: 4; }
-        .map-zone { fill: #91af9b; fill-opacity: .32; stroke: #668a74; stroke-width: 2; stroke-dasharray: 7 6; }
-        .map-safe-zone { fill: #d8e8d8; fill-opacity: .78; stroke: #628a70; stroke-width: 2; }
         .footer { padding: 12px 0 16px; }
         .footer-inner { font-size: .74rem; }
         .footer .brand-mark { width: 28px; height: 28px; }
@@ -343,109 +329,173 @@ $router->add('GET', '/', static function (): void {
             .contact-item a, .contact-item strong { display: block; font-size: .72rem; line-height: 1.35; overflow-wrap: anywhere; }
             .sample-note { font-size: .65rem; }
         }
+        .stage { grid-template-rows: auto minmax(0, 1fr); overflow: hidden; }
+        .info-explorer { display: flex; min-height: 0; flex-direction: column; }
+        .view-content { min-height: 0; flex: 1; overflow-y: auto; overscroll-behavior: contain; scrollbar-color: #a8b8ae transparent; scrollbar-width: thin; }
+        .proof-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; max-width: 700px; margin: 16px auto 0; }
+        .proof-item { padding: 12px 10px; border: 1px solid var(--line); border-radius: 7px; background: rgba(255,255,255,.58); text-align: left; }
+        .proof-item strong { display: block; margin-bottom: 4px; font-family: var(--serif); font-size: 1rem; font-weight: 400; }
+        .proof-item span { display: block; color: var(--muted); font-size: .68rem; line-height: 1.4; }
+        .mission-note { max-width: 560px; margin: 12px auto 0 !important; padding: 10px 14px; border: 1px solid var(--line); border-radius: 6px; background: rgba(255,255,255,.6); color: var(--green) !important; font-family: var(--serif); font-size: 1.15rem !important; }
+        .services-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px 12px; max-width: 1000px; margin-top: 12px; }
+        .service { padding: 10px; border: 1px solid var(--line); border-radius: 7px; background: rgba(255,255,255,.55); }
+        .service-number { margin-bottom: 5px; }
+        .service h3 { font-size: .82rem; line-height: 1.25; }
+        .service p { font-size: .7rem; line-height: 1.4; }
+        .process-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; max-width: 1000px; }
+        .process-step { min-height: 110px; padding: 12px; border: 1px solid var(--line); border-radius: 7px; background: rgba(255,255,255,.58); }
+        .process-step::before { margin-bottom: 8px; }
+        .process-step h3 { font-size: .86rem; }
+        .process-step p { font-size: .72rem; line-height: 1.45; }
+        .contact-panel { display: grid; grid-template-columns: .85fr 1.15fr; gap: 18px; max-width: 1000px; margin: 0 auto; padding: 18px; border-radius: 8px; background: #1d4052; color: white; text-align: left; }
+        .contact-intro h3 { margin: 9px 0; font-family: var(--serif); font-size: 1.55rem; font-weight: 400; line-height: 1.12; }
+        .contact-intro p { color: #d0ddd5; font-size: .78rem; line-height: 1.5; }
+        .contact-checks { display: grid; gap: 7px; margin: 12px 0 0; color: #e2eee6; font-size: .69rem; }
+        .contact-checks a { color: #fff; font-weight: 700; overflow-wrap: anywhere; }
+        .contact-layout { min-width: 0; }
+        .lead-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; padding: 12px; border-radius: 7px; background: #fff; color: var(--ink); }
+        .lead-form label { display: grid; gap: 4px; color: var(--muted); font-size: .64rem; font-weight: 700; }
+        .lead-form label.full { grid-column: 1 / -1; }
+        .lead-form input, .lead-form select, .lead-form textarea { width: 100%; min-width: 0; min-height: 32px; padding: 7px 8px; border: 1px solid var(--line); border-radius: 4px; background: white; color: var(--ink); font: 400 .72rem var(--sans); }
+        .lead-form textarea { min-height: 48px; resize: vertical; }
+        .lead-form button { min-height: 34px; grid-column: 1 / -1; border: 0; border-radius: 4px; background: var(--green); color: white; font: 700 .72rem var(--sans); cursor: pointer; }
+        .contact-layout .sample-note { margin: 7px 0 0 !important; color: #d7e7a9 !important; font-size: .64rem; text-align: left; }
+        .compact-footer { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-width: 1000px; margin: 12px auto 0; padding-top: 10px; border-top: 1px solid var(--line); color: var(--muted); font-size: .66rem; text-align: left; }
+        .compact-footer p { margin: 0; }
+        .compact-footer nav { display: flex; justify-content: end; flex-wrap: wrap; gap: 12px; }
+        .compact-footer a:hover { color: var(--green); }
+        @media (max-width: 800px) {
+            .services-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .process-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .contact-panel { grid-template-columns: 1fr 1.2fr; }
+        }
+        @media (max-width: 520px) {
+            .proof-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; margin-top: 9px; }
+            .proof-item { padding: 8px; }
+            .proof-item strong { font-size: .88rem; }
+            .proof-item span { font-size: .62rem; }
+            .services-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px; }
+            .service { padding: 7px; }
+            .service h3 { font-size: .76rem; }
+            .service p { font-size: .65rem; }
+            .process-grid { grid-template-columns: 1fr 1fr; }
+            .process-step { min-height: 0; padding: 8px; }
+            .contact-panel { grid-template-columns: 1fr; gap: 10px; padding: 12px; }
+            .contact-intro h3 { font-size: 1.3rem; }
+            .contact-intro p { margin-bottom: 5px; }
+            .contact-checks { grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 7px; font-size: .62rem; }
+            .lead-form { gap: 6px; padding: 9px; }
+            .compact-footer { grid-template-columns: 1fr; }
+            .compact-footer nav { justify-content: start; }
+        }
     </style>
 </head>
 <body>
     <header class="topbar">
         <div class="container nav">
-            <a class="brand" href="#inicio" aria-label="MAX Security, inicio"><img class="brand-logo" src="max-logo.png" alt="MAX Security"></a>
+            <a class="brand" href="#inicio" aria-label="MAX Asesoría Empresarial Especializada, inicio"><span class="brand-lockup"><strong>MAX</strong><span>ASESORÍA EMPRESARIAL<br>ESPECIALIZADA</span></span></a>
             <nav class="nav-links" aria-label="Navegación principal">
-                <a href="#contenido" data-view="empresa" aria-current="page">La empresa</a>
+                <a href="#contenido" data-view="empresa" aria-current="page">Quiénes somos</a>
                 <a href="#contenido" data-view="servicios">Servicios</a>
-                <a href="#contenido" data-view="metodo">Cómo trabajamos</a>
-                <a class="nav-contact" href="#contenido" data-view="contacto">Contacto</a>
+                <a href="#contenido" data-view="metodo">Metodología</a>
+                <a class="nav-contact" href="#contenido" data-view="contacto">Solicitar asesoría</a>
             </nav>
         </div>
     </header>
 
         <main class="scroll-story" id="inicio">
             <div class="container stage">
-        <section class="hero" aria-label="Presentación de MAX Security">
+        <section class="hero" aria-label="Presentación de MAX">
             <div class="hero-grid">
                 <div class="hero-copy">
-                        <div class="eyebrow">Protección civil · prevención · comunidad</div>
-                        <h1>Preparados hoy. <em>Protegidos siempre.</em></h1>
-                        <p class="lead">Planes, rutas y coordinación para cuidar a las personas y mantener la operación segura.</p>
+                        <div class="eyebrow">Asesoría · capacitación · dictámenes</div>
+                        <h1>Asesoría empresarial <em>especializada</em></h1>
+                        <p class="lead">Soluciones de seguridad y prevención con sustento en la normatividad aplicable.</p>
                 </div>
-                    <template id="map-visual-template">
-                        <div class="hero-visual map-visual" role="img" aria-label="Mapa ilustrativo de zonas seguras, rutas de evacuación y punto de encuentro">
-                            <svg viewBox="0 0 900 620" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-                                <rect width="900" height="620" fill="#e7eee8"/>
-                                <path d="M0 86 160 38 294 74 402 30 548 78 702 32 900 90V0H0ZM0 520 116 466 260 502 398 452 558 510 704 458 900 506V620H0Z" fill="#d9e4d9"/>
-                                <path d="M62 116 210 96 258 188 180 258 66 226ZM320 92 454 72 492 172 402 224 300 180ZM592 92 744 66 826 142 774 228 630 198ZM216 322 334 264 420 326 386 438 266 456 184 392ZM484 270 600 234 694 296 654 412 526 438 452 358ZM726 320 836 266 900 312 900 444 802 468 712 408Z" fill="#d1ddd2" stroke="#c3d1c6" stroke-width="3"/>
-                                <path class="map-road-edge" stroke-width="26" d="M-30 284C148 246 206 298 334 262S580 214 930 250M120-30C160 132 124 242 200 348S284 520 248 660M530-20C486 136 566 230 520 342S494 512 548 650M766-30C712 120 816 202 754 322S748 500 826 650M-20 492C162 438 250 498 382 470S662 446 924 484"/>
-                                <path class="map-road" stroke-width="20" d="M-30 284C148 246 206 298 334 262S580 214 930 250M120-30C160 132 124 242 200 348S284 520 248 660M530-20C486 136 566 230 520 342S494 512 548 650M766-30C712 120 816 202 754 322S748 500 826 650M-20 492C162 438 250 498 382 470S662 446 924 484"/>
-                                <path class="map-grid-lines" d="m36 150 128-30m132 82 142-70m118 12 148-36M42 400l118-42m230 42 44-108m76 180 124-48m-548 96 86-34m416-180 126-60"/>
-                                <path class="map-zone" d="M300 188 416 142 488 208 458 328 350 354 274 286Z"/>
-                                <path class="map-safe-zone" d="M550 338 624 302 686 344 674 414 590 430 540 384Z"/>
-                                <path class="map-route" d="M338 250C390 270 414 302 460 300S530 346 606 370"/>
-                                <circle cx="338" cy="250" r="13" class="map-pin"/>
-                                <circle cx="606" cy="370" r="17" fill="#35675d" stroke="#fff" stroke-width="5"/>
-                                <circle cx="606" cy="370" r="5" fill="#fff"/>
-                                <g fill="#54676a" font-family="Segoe UI, sans-serif" font-size="15" font-weight="600">
-                                    <text x="368" y="232">ZONA DE ATENCIÓN</text>
-                                    <text x="620" y="399">PUNTO SEGURO</text>
-                                    <text x="63" y="334">RUTA DE EVACUACIÓN</text>
-                                </g>
-                            </svg>
-                            <div class="map-legend"><strong>Mapa de prevención</strong><span><i class="map-key alert"></i>Zona de atención</span><span><i class="map-key"></i>Punto de encuentro</span></div>
-                            <span class="map-disclaimer">Mapa ilustrativo</span>
-                            <div class="visual-shade"></div>
-                            <div class="visual-label"><div><strong>Personas primero.</strong><span>Prevención · rutas · respuesta</span></div><span class="status">Plan de protección activo</span></div>
+                    <template id="hero-visual-template">
+                        <div class="hero-visual">
+                            <img src="" alt="" loading="eager" decoding="async">
+                            <div class="visual-shade" aria-hidden="true"></div>
+                            <div class="visual-label"><div><strong data-visual-title></strong><span data-visual-description></span></div><span class="status" data-visual-status></span></div>
                         </div>
                     </template>
             </div>
         </section>
 
-        <section class="info-explorer" id="contenido" aria-label="Información de MAX Security">
+        <section class="info-explorer" id="contenido" aria-label="Información de MAX">
             <div class="view-content" aria-live="polite">
                 <section class="info-panel" id="panel-empresa" data-panel="empresa">
                     <template data-hero>
-                        <div class="hero-copy"><div class="eyebrow">Nuestra organización</div><h1>Protección cercana. <em>Comunidad preparada.</em></h1><p class="lead">Diseñamos prevención y respuesta pensando primero en las personas.</p></div>
+                        <div class="hero-copy"><div class="eyebrow">Quiénes somos</div><h1>Asesoría empresarial <em>especializada.</em></h1><p class="lead">Prevención y cumplimiento con criterios técnicos claros.</p></div>
                     </template>
-                    <h2>Protección civil para empresas y comunidades.</h2>
-                    <p>MAX Security ayuda a las organizaciones a prepararse antes de una emergencia y a responder con claridad cuando cada minuto importa. Convertimos riesgos, instalaciones y procedimientos en planes que las personas pueden entender y poner en práctica.</p>
-                    <p>Trabajamos en prevención, preparación y coordinación: identificamos áreas de atención, definimos rutas y puntos de encuentro, y ayudamos a que cada integrante conozca su función. El objetivo es proteger vidas y mantener una respuesta ordenada.</p>
+                    <h2>Quiénes somos</h2>
+                    <p>MAX brinda asesoría empresarial especializada en prevención, protección civil y gestión de riesgos. Acompañamos a empresas e instituciones con programas, capacitación y dictámenes técnicos.</p>
+                    <p>Nuestro trabajo se desarrolla con criterios técnicos y documentación sustentada en las normas y disposiciones aplicables, para ofrecer orientación clara y profesional.</p>
+                    <div class="proof-grid" aria-label="Misión y visión de MAX">
+                        <div class="proof-item"><strong>Misión</strong><span>Ayudar a las organizaciones a prevenir riesgos y proteger a las personas mediante asesoría especializada, capacitación y soluciones responsables.</span></div>
+                        <div class="proof-item"><strong>Visión</strong><span>Ser una firma confiable y reconocida por su profesionalismo, claridad técnica y compromiso con la seguridad.</span></div>
+                    </div>
                 </section>
                 <section class="info-panel" id="panel-servicios" data-panel="servicios" hidden>
                     <template data-hero>
-                        <div class="hero-copy"><div class="eyebrow">Servicios de protección civil</div><h1>Riesgos visibles. <em>Respuestas claras.</em></h1><p class="lead">Mapas, protocolos y capacitación para actuar con orden ante una emergencia.</p></div>
+                        <div class="hero-copy"><div class="eyebrow">Servicios especializados</div><h1>Prevención con respaldo <em>técnico.</em></h1><p class="lead">Asesoría, formación y dictámenes para empresas e instituciones.</p></div>
                     </template>
-                    <h2>Prevención práctica para proteger vidas.</h2>
+                    <h2>Servicios especializados</h2>
                     <div class="services-grid">
-                        <article class="service"><span class="service-number">01 / DIAGNÓSTICO</span><h3>Mapa de riesgos</h3><p>Identificamos amenazas, zonas vulnerables y recursos disponibles dentro de tus instalaciones.</p></article>
-                        <article class="service"><span class="service-number">02 / PREPARACIÓN</span><h3>Planes de emergencia</h3><p>Definimos responsables, procedimientos y contactos para distintos escenarios.</p></article>
-                        <article class="service"><span class="service-number">03 / EVACUACIÓN</span><h3>Rutas y señalización</h3><p>Organizamos salidas, zonas seguras y puntos de encuentro fáciles de identificar.</p></article>
-                        <article class="service"><span class="service-number">04 / CAPACITACIÓN</span><h3>Brigadas y simulacros</h3><p>Practicamos evacuación, primeros auxilios y comunicación para que cada persona sepa actuar.</p></article>
-                        <article class="service"><span class="service-number">05 / COORDINACIÓN</span><h3>Protocolos de respuesta</h3><p>Establecemos cómo alertar, atender a las personas y coordinar apoyos durante un incidente.</p></article>
-                        <article class="service"><span class="service-number">06 / CONTINUIDAD</span><h3>Revisión y mejora</h3><p>Actualizamos planes, mapas y recursos después de simulacros, cambios o incidentes.</p></article>
+                        <article class="service"><span class="service-number">01 / ASESORÍA</span><h3>Asesorías especializadas</h3><p>Orientación técnica para atender necesidades de prevención y seguridad empresarial.</p></article>
+                        <article class="service"><span class="service-number">02 / PROTECCIÓN CIVIL</span><h3>Programas internos</h3><p>Elaboración y actualización de programas internos de protección civil.</p></article>
+                        <article class="service"><span class="service-number">03 / ANÁLISIS</span><h3>Análisis de riesgo</h3><p>Identificación de peligros y evaluación de riesgos para orientar medidas preventivas.</p></article>
+                        <article class="service"><span class="service-number">04 / DICTÁMENES</span><h3>Dictámenes técnicos</h3><p>Dictámenes de riesgo, eléctricos, de gas, estructurales y de gas LP.</p></article>
+                        <article class="service"><span class="service-number">05 / CAPACITACIÓN</span><h3>Primeros auxilios</h3><p>Capacitación para responder ante emergencias y brindar atención inicial.</p></article>
+                        <article class="service"><span class="service-number">06 / PREVENCIÓN</span><h3>Incendios y extintores</h3><p>Combate de incendios, uso y manejo de extintores.</p></article>
+                        <article class="service"><span class="service-number">07 / FORMACIÓN</span><h3>Manejo de ambulancia</h3><p>Curso de manejo de ambulancia con certificación.</p></article>
+                        <article class="service"><span class="service-number">08 / PERITAJE</span><h3>Firma pericial</h3><p>Servicios de firma pericial para documentación y dictámenes técnicos.</p></article>
                     </div>
                 </section>
                 <section class="info-panel" id="panel-metodo" data-panel="metodo" hidden>
                     <template data-hero>
-                        <div class="hero-copy"><div class="eyebrow">Cómo trabajamos</div><h1>Un plan compartido. <em>Una respuesta coordinada.</em></h1><p class="lead">Acompañamos a tu equipo desde el mapa inicial hasta cada simulacro.</p></div>
+                        <div class="hero-copy"><div class="eyebrow">Metodología de trabajo</div><h1>Prevención clara. <em>Respuesta coordinada.</em></h1><p class="lead">Acompañamiento profesional para fortalecer la seguridad.</p></div>
                     </template>
-                    <h2>De conocer el lugar a saber cómo actuar.</h2>
+                    <h2>Etapas de trabajo</h2>
                     <div class="process-grid">
-                        <article class="process-step"><h3>1. Recorremos</h3><p>Conocemos tus espacios, actividad, aforo y necesidades de las personas que los ocupan.</p></article>
-                        <article class="process-step"><h3>2. Trazamos</h3><p>Señalamos riesgos, rutas de salida, puntos de reunión y recursos de emergencia en un plan claro.</p></article>
-                        <article class="process-step"><h3>3. Practicamos</h3><p>Capacitamos responsables, realizamos simulacros y ajustamos el plan con lo aprendido.</p></article>
+                        <article class="process-step"><h3>Diagnóstico</h3><p>Revisamos instalaciones, actividades y condiciones de riesgo.</p></article>
+                        <article class="process-step"><h3>Fundamento técnico</h3><p>Identificamos normas y disposiciones aplicables al servicio solicitado.</p></article>
+                        <article class="process-step"><h3>Propuesta y documentación</h3><p>Preparamos medidas y documentos con criterios técnicos claros.</p></article>
+                        <article class="process-step"><h3>Acompañamiento</h3><p>Orientamos sobre la atención de requisitos y siguientes pasos.</p></article>
                     </div>
                 </section>
                 <section class="info-panel" id="panel-contacto" data-panel="contacto" hidden>
                     <template data-hero>
-                        <div class="hero-copy"><div class="eyebrow">Contacto directo</div><h1>Hablemos de prevención. <em>Cuenta con nosotros.</em></h1><p class="lead">Cuéntanos sobre tu espacio y las personas que necesitas proteger.</p></div>
+                        <div class="hero-copy"><div class="eyebrow">Asesoría profesional</div><h1>Solicita una <em>asesoría.</em></h1><p class="lead">Conoce soluciones de protección civil para tu organización.</p></div>
                     </template>
-                    <h2>Empecemos por conocer tus necesidades.</h2>
-                    <p>Escríbenos o llámanos con el tipo de espacio, el número aproximado de personas y tus dudas. Coordinaremos una primera conversación para orientar los siguientes pasos.</p>
-                    <div class="contact-details">
-                        <div class="contact-item"><span>Correo</span><a href="mailto:hola@maxsecurity.example">hola@maxsecurity.example</a></div>
-                        <div class="contact-item"><span>Teléfono</span><a href="tel:+15550142026">+1 (555) 014-2026</a></div>
-                        <div class="contact-item"><span>Oficina</span><strong>Av. Central 245, Ciudad Ejemplo</strong></div>
-                        <div class="contact-item"><span>Horario de ejemplo</span><strong>Lunes a viernes, 8:00 a 18:00</strong></div>
-                        <div class="contact-item"><span>Horario de ejemplo</span><strong>Lunes a viernes, 8:00 a 18:00</strong></div>
-                        <p class="sample-note">Datos de contacto ficticios para esta demostración.</p>
+                    <div class="contact-panel">
+                        <div class="contact-intro">
+                            <div class="eyebrow">Asesoría especializada</div>
+                            <h3>Conversemos sobre lo que necesita tu empresa.</h3>
+                            <p>Contacta a MAX para recibir información sobre asesorías, programas, capacitación y dictámenes.</p>
+                            <div class="contact-checks"><a href="tel:+529612333442">961 233 3442</a><a href="mailto:programas.internos.max@gmail.com">programas.internos.max@gmail.com</a></div>
+                        </div>
+                        <div class="contact-layout">
+                            <form class="lead-form" action="mailto:programas.internos.max@gmail.com" method="post" enctype="text/plain">
+                                <label>Nombre / empresa<input name="nombre" autocomplete="organization" required></label>
+                                <label>Correo electrónico<input name="correo" type="email" autocomplete="email" required></label>
+                                <label>Teléfono<input name="telefono" type="tel" autocomplete="tel"></label>
+                                <label>Servicio de interés<select name="servicio" required><option value="" selected disabled>Selecciona un servicio</option><option>Asesoría especializada</option><option>Programa interno</option><option>Análisis de riesgo</option><option>Dictamen técnico</option><option>Capacitación</option><option>Firma pericial</option><option>Otro servicio</option></select></label>
+                                <label class="full">¿Cómo podemos ayudarte?<textarea name="mensaje" rows="2" required></textarea></label>
+                                <button type="submit">Solicitar asesoría</button>
+                            </form>
+                        </div>
                     </div>
+                    <footer class="compact-footer">
+                        <p><strong>MAX</strong> · Asesoría Empresarial Especializada<br>Prevención, seguridad y confianza.</p>
+                        <nav aria-label="Navegación del pie de página">
+                            <a href="#inicio">Inicio</a>
+                            <a href="#contenido" data-view="empresa">Quiénes somos</a>
+                            <a href="#contenido" data-view="servicios">Servicios</a>
+                            <a href="#contenido" data-view="metodo">Metodología</a>
+                            <a href="#contenido" data-view="contacto">Solicitar asesoría</a>
+                        </nav>
+                    </footer>
                 </section>
             </div>
         </section>
@@ -464,11 +514,76 @@ $router->add('GET', '/', static function (): void {
         const scrollModules = Array.from(document.querySelectorAll('[data-scroll-view]'));
         const viewContent = document.querySelector('.view-content');
         const heroGrid = document.querySelector('.hero-grid');
-        const mapTemplate = document.querySelector('#map-visual-template');
+        const visualTemplate = document.querySelector('#hero-visual-template');
+        const visualContent = {
+            empresa: {
+                image: 'safety-advisory.jpg',
+                alt: 'Profesionales con equipo de protección conversan durante una revisión en obra',
+                title: 'Seguridad desde el diagnóstico.',
+                description: 'Asesoría · programas · prevención',
+                status: 'Protección civil empresarial',
+            },
+            servicios: {
+                image: 'fire-drill-training.jpg',
+                alt: 'Bomberos realizan un ejercicio de extinción de fuego con mangueras',
+                title: 'Capacitación en respuesta.',
+                description: 'Brigadas · incendios · extintores',
+                status: 'Formación en campo',
+            },
+            metodo: {
+                image: 'electrical-safety-check.jpg',
+                alt: 'Técnico con chaleco de protección durante una revisión de seguridad eléctrica',
+                title: 'Cada riesgo se revisa en sitio.',
+                description: 'Instalaciones · documentación · seguimiento',
+                status: 'Evaluación técnica',
+            },
+            contacto: {
+                image: 'emergency-ambulance.jpg',
+                alt: 'Ambulancia de emergencia estacionada en la calle',
+                title: 'Atención preparada.',
+                description: 'Capacitación · respuesta · seguridad',
+                status: 'Manejo de ambulancia',
+            },
+        };
         let currentView = 'empresa';
         let viewChangeTimer;
+        let navigationTarget = null;
+        let navigationTimer;
 
-        heroGrid.append(mapTemplate.content.firstElementChild.cloneNode(true));
+        function createHeroVisual(view) {
+            const visual = visualTemplate.content.firstElementChild.cloneNode(true);
+            const content = visualContent[view];
+            const image = visual.querySelector('img');
+
+            image.src = content.image;
+            image.alt = content.alt;
+            visual.querySelector('[data-visual-title]').textContent = content.title;
+            visual.querySelector('[data-visual-description]').textContent = content.description;
+            visual.querySelector('[data-visual-status]').textContent = content.status;
+
+            return visual;
+        }
+
+        heroGrid.append(createHeroVisual('empresa'));
+
+        function completeNavigation() {
+            if (navigationTarget === null) return;
+
+            const target = navigationTarget;
+            navigationTarget = null;
+            window.clearTimeout(navigationTimer);
+            activateView(target);
+        }
+
+        document.addEventListener('scrollend', (event) => {
+            if (event.target === document) completeNavigation();
+        }, { passive: true });
+        document.addEventListener('scroll', () => {
+            if (navigationTarget === null) return;
+
+            window.clearTimeout(navigationTimer);
+            navigationTimer = window.setTimeout(completeNavigation, 180);
+        }, { passive: true });
 
         function activateView(view) {
             const activePanel = viewPanels.find((panel) => panel.dataset.panel === view);
@@ -482,7 +597,7 @@ $router->add('GET', '/', static function (): void {
             viewChangeTimer = window.setTimeout(() => {
                 const heroTemplate = activePanel.querySelector('[data-hero]');
                 if (heroTemplate) {
-                    heroGrid.replaceChildren(heroTemplate.content.cloneNode(true), mapTemplate.content.firstElementChild.cloneNode(true));
+                    heroGrid.replaceChildren(heroTemplate.content.cloneNode(true), createHeroVisual(view));
                 }
                 viewPanels.forEach((panel) => {
                     panel.hidden = panel.dataset.panel !== view;
@@ -502,12 +617,16 @@ $router->add('GET', '/', static function (): void {
         viewTabs.forEach((tab) => {
             tab.addEventListener('click', (event) => {
                 event.preventDefault();
-                activateView(tab.dataset.view);
-                const marker = scrollModules.find((item) => item.dataset.scrollView === tab.dataset.view);
+                const target = tab.dataset.view;
+                navigationTarget = target;
+                window.clearTimeout(navigationTimer);
+                activateView(target);
+                const marker = scrollModules.find((item) => item.dataset.scrollView === target);
                 marker?.scrollIntoView({
                     behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
                     block: 'center',
                 });
+                navigationTimer = window.setTimeout(completeNavigation, 800);
             });
 
         });
@@ -522,7 +641,9 @@ $router->add('GET', '/', static function (): void {
                         .filter((entry) => entry.isIntersecting)
                         .sort((first, second) => second.intersectionRatio - first.intersectionRatio)[0];
 
-                    if (activeModule) activateView(activeModule.target.dataset.scrollView);
+                    if (activeModule && navigationTarget === null) {
+                        activateView(activeModule.target.dataset.scrollView);
+                    }
                 }, { rootMargin: `-${observerMargin}px 0px -${observerMargin}px 0px`, threshold: 0 });
 
                 scrollModules.forEach((module) => moduleObserver.observe(module));
