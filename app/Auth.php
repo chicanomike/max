@@ -8,23 +8,24 @@ final class Auth
 {
     public static function authenticate(string $email, string $password): ?array
     {
-        $demoUser = [
-            'id' => 1,
-            'email' => 'admin@max.local',
-            'password_hash' => password_hash('admin123', PASSWORD_DEFAULT),
-        ];
+        $configuredEmail = (string) Config::get('ADMIN_EMAIL', '');
+        $passwordHash = (string) Config::get('ADMIN_PASSWORD_HASH', '');
 
-        if (strtolower($email) !== strtolower($demoUser['email'])) {
+        if (
+            $configuredEmail === ''
+            || $passwordHash === ''
+            || !hash_equals(strtolower($configuredEmail), strtolower($email))
+        ) {
             return null;
         }
 
-        if (!password_verify($password, $demoUser['password_hash'])) {
+        if (!password_verify($password, $passwordHash)) {
             return null;
         }
 
         return [
-            'id' => $demoUser['id'],
-            'email' => $demoUser['email'],
+            'id' => 1,
+            'email' => $configuredEmail,
         ];
     }
 
@@ -38,7 +39,10 @@ final class Auth
             'exp' => time() + 3600,
         ];
         $payloadEncoded = base64_encode(json_encode($payload, JSON_UNESCAPED_SLASHES));
-        $secret = Config::get('JWT_SECRET', 'development-secret');
+        $secret = (string) Config::get('JWT_SECRET', '');
+        if (strlen($secret) < 32) {
+            throw new \RuntimeException('JWT_SECRET must contain at least 32 characters.');
+        }
         $signature = hash_hmac('sha256', $header . '.' . $payloadEncoded, $secret, true);
 
         return $header . '.' . $payloadEncoded . '.' . base64_encode($signature);
@@ -58,7 +62,10 @@ final class Auth
         }
 
         [$header, $payload, $signature] = $parts;
-        $secret = Config::get('JWT_SECRET', 'development-secret');
+        $secret = (string) Config::get('JWT_SECRET', '');
+        if (strlen($secret) < 32) {
+            return null;
+        }
         $expected = base64_encode(hash_hmac('sha256', $header . '.' . $payload, $secret, true));
 
         if (!hash_equals($expected, $signature)) {

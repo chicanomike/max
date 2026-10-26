@@ -33,6 +33,12 @@ final class Config
 
     public static function get(string $key, mixed $default = null): mixed
     {
+        $environmentValue = getenv($key);
+
+        if ($environmentValue !== false) {
+            return $environmentValue;
+        }
+
         return self::$config[$key] ?? $default;
     }
 }

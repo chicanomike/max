@@ -5,11 +5,16 @@ declare(strict_types=1);
 require dirname(__DIR__) . '/app/bootstrap.php';
 
 use App\Auth;
+use App\AdminController;
 use App\Config;
 use App\RateLimiter;
 use App\Response;
 use App\Router;
+use App\Session;
+use App\SubmissionController;
 
+Session::start();
+date_default_timezone_set((string) Config::get('APP_TIMEZONE', 'America/Mexico_City'));
 Response::setSecurityHeaders();
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -18,6 +23,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 $router = new Router();
+(new AdminController())->register($router);
+SubmissionController::register($router);
 
 $router->add('GET', '/', static function (): void {
     $accept = $_SERVER['HTTP_ACCEPT'] ?? '';
@@ -359,6 +366,9 @@ $router->add('GET', '/', static function (): void {
         .lead-form input, .lead-form select, .lead-form textarea { width: 100%; min-width: 0; min-height: 32px; padding: 7px 8px; border: 1px solid var(--line); border-radius: 4px; background: white; color: var(--ink); font: 400 .72rem var(--sans); }
         .lead-form textarea { min-height: 48px; resize: vertical; }
         .lead-form button { min-height: 34px; grid-column: 1 / -1; border: 0; border-radius: 4px; background: var(--green); color: white; font: 700 .72rem var(--sans); cursor: pointer; }
+        .lead-form button:disabled { opacity: .65; cursor: wait; }
+        .form-feedback { grid-column: 1 / -1; margin: 0; padding: 8px; border-left: 3px solid var(--green); background: #edf4ef; color: var(--ink); font-size: .72rem; line-height: 1.45; }
+        .form-feedback.is-error { border-color: var(--alert); background: #fff0ee; }
         .contact-layout .sample-note { margin: 7px 0 0 !important; color: #d7e7a9 !important; font-size: .64rem; text-align: left; }
         .compact-footer { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-width: 1000px; margin: 12px auto 0; padding-top: 10px; border-top: 1px solid var(--line); color: var(--muted); font-size: .66rem; text-align: left; }
         .compact-footer p { margin: 0; }
@@ -476,13 +486,16 @@ $router->add('GET', '/', static function (): void {
                             <div class="contact-checks"><a href="tel:+529612333442">961 233 3442</a><a href="mailto:programas.internos.max@gmail.com">programas.internos.max@gmail.com</a></div>
                         </div>
                         <div class="contact-layout">
-                            <form class="lead-form" action="mailto:programas.internos.max@gmail.com" method="post" enctype="text/plain">
-                                <label>Nombre / empresa<input name="nombre" autocomplete="organization" required></label>
-                                <label>Correo electrónico<input name="correo" type="email" autocomplete="email" required></label>
-                                <label>Teléfono<input name="telefono" type="tel" autocomplete="tel"></label>
-                                <label>Servicio de interés<select name="servicio" required><option value="" selected disabled>Selecciona un servicio</option><option>Asesoría especializada</option><option>Programa interno</option><option>Análisis de riesgo</option><option>Dictamen técnico</option><option>Capacitación</option><option>Firma pericial</option><option>Otro servicio</option></select></label>
-                                <label class="full">¿Cómo podemos ayudarte?<textarea name="mensaje" rows="2" required></textarea></label>
-                                <button type="submit">Solicitar asesoría</button>
+                            <form class="lead-form" action="solicitudes" method="post" data-request-form>
+                                <input type="hidden" name="csrf_token" value="__CSRF_TOKEN__">
+                                <input type="hidden" name="submission_key" value="__SUBMISSION_KEY__">
+                                <label>Nombre completo<input name="nombre" autocomplete="name" maxlength="150" required></label>
+                                <label>Correo electrónico<input name="correo" type="email" autocomplete="email" maxlength="254" required></label>
+                                <label>Teléfono<input name="telefono" type="tel" autocomplete="tel" minlength="7" maxlength="30" pattern="[0-9+(). -]{7,30}" title="Escribe entre 7 y 15 dígitos; puedes incluir espacios y signos." required></label>
+                                <label>Servicio de interés<select name="servicio" required><option value="" selected disabled>Selecciona un servicio</option><option value="Asesoría especializada">Asesoría especializada</option><option value="Programa interno">Programa interno</option><option value="Análisis de riesgo">Análisis de riesgo</option><option value="Dictamen técnico">Dictamen técnico</option><option value="Capacitación">Capacitación</option><option value="Firma pericial">Firma pericial</option><option value="Otro servicio">Otro servicio</option></select></label>
+                                <label class="full">¿Cómo podemos ayudarte?<textarea name="mensaje" rows="2" maxlength="3000" required></textarea></label>
+                                <button type="submit" data-submit-button>Solicitar asesoría</button>
+                                <p class="form-feedback" role="status" aria-live="polite" hidden></p>
                             </form>
                         </div>
                     </div>
@@ -509,6 +522,45 @@ $router->add('GET', '/', static function (): void {
         </main>
 
     <script>
+        const requestForm = document.querySelector('[data-request-form]');
+        requestForm?.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            if (!requestForm.reportValidity()) return;
+
+            const submitButton = requestForm.querySelector('[data-submit-button]');
+            const feedback = requestForm.querySelector('.form-feedback');
+            const previousLabel = submitButton.textContent;
+            submitButton.disabled = true;
+            submitButton.textContent = 'Enviando...';
+            feedback.hidden = true;
+            feedback.classList.remove('is-error');
+
+            try {
+                const response = await fetch(requestForm.action, {
+                    method: 'POST',
+                    body: new FormData(requestForm),
+                    headers: { Accept: 'application/json' },
+                    credentials: 'same-origin',
+                });
+                const result = await response.json();
+                if (!response.ok) throw new Error(result.error || 'No fue posible enviar la solicitud.');
+
+                requestForm.reset();
+                requestForm.elements.submission_key.value = result.submission_key;
+                feedback.textContent = result.whatsapp_status === 'enviado'
+                    ? `Solicitud #${String(result.id).padStart(3, '0')} registrada. La notificación fue enviada.`
+                    : `Solicitud #${String(result.id).padStart(3, '0')} registrada. La notificación de WhatsApp está pendiente y podrá reintentarse desde administración.`;
+                feedback.hidden = false;
+            } catch (error) {
+                feedback.textContent = error.message || 'No fue posible enviar la solicitud. Inténtalo de nuevo.';
+                feedback.classList.add('is-error');
+                feedback.hidden = false;
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = previousLabel;
+            }
+        });
+
         const viewTabs = Array.from(document.querySelectorAll('[data-view]'));
         const viewPanels = Array.from(document.querySelectorAll('[data-panel]'));
         const scrollModules = Array.from(document.querySelectorAll('[data-scroll-view]'));
@@ -656,6 +708,11 @@ $router->add('GET', '/', static function (): void {
 </body>
 </html>
 HTML;
+        $html = str_replace(
+            ['__CSRF_TOKEN__', '__SUBMISSION_KEY__'],
+            [htmlspecialchars(Session::csrfToken(), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'), bin2hex(random_bytes(32))],
+            $html
+        );
         Response::html($html);
     }
 
@@ -696,6 +753,10 @@ $router->add('POST', '/login', static function (): void {
     if (!filter_var($email, FILTER_VALIDATE_EMAIL) || $password === '') {
         Response::json(['error' => 'Credenciales inválidas.'], 400);
         return;
+    }
+
+    if (strlen((string) Config::get('JWT_SECRET', '')) < 32) {
+        Response::json(['error' => 'La autenticación no está configurada.'], 503);
     }
 
     $user = Auth::authenticate($email, $password);
