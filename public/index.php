@@ -75,10 +75,7 @@ $router->add('GET', '/', static function (): void {
         }
         .nav { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
         .brand { display: inline-flex; align-items: center; }
-        .brand-lockup { display: inline-flex; align-items: center; gap: 11px; }
-        .brand-lockup strong { color: var(--blue); font-size: 1.25rem; font-weight: 800; }
-        .brand-lockup span { max-width: 165px; color: var(--blue); font-size: .59rem; font-weight: 800; line-height: 1.3; }
-        .brand-logo { display: block; width: 74px; height: 54px; object-fit: contain; }
+        .brand-logo { display: block; width: 190px; max-width: 32vw; height: auto; border-radius: 4px; object-fit: contain; }
         .nav-links { display: flex; align-items: center; gap: 28px; color: var(--blue); font-size: .9rem; }
         .nav-links a { transition: color .2s ease; }
         .nav-links a:hover, .nav-links a[aria-current="page"] { color: var(--red); }
@@ -408,7 +405,7 @@ $router->add('GET', '/', static function (): void {
         ::placeholder { color: var(--blue); opacity: 1; }
         ::selection { background: var(--blue); color: var(--white); }
         .topbar { background: var(--blue); border-bottom: 2px solid var(--yellow); }
-        .brand-lockup strong, .brand-lockup span, .nav-links { color: var(--white); }
+        .nav-links { color: var(--white); }
         .nav-links a:hover, .nav-links a[aria-current="page"], .topbar .nav-links a.is-active { color: var(--yellow); }
         .nav-contact, .btn-primary, .lead-form button { background: var(--red); border-color: var(--red); color: var(--white); }
         .nav-contact:hover, .btn-primary:hover, .lead-form button:hover:not(:disabled) { background: var(--blue); border-color: var(--blue); color: var(--white); }
@@ -455,12 +452,15 @@ $router->add('GET', '/', static function (): void {
         .trust-points span::before, .process-step::before, .service-number { color: var(--red); }
         .eyebrow::before { background: var(--yellow); }
         :focus-visible { outline: 3px solid var(--yellow); outline-offset: 3px; }
+        @media (max-width: 520px) {
+            .brand-logo { width: 165px; max-width: 48vw; }
+        }
     </style>
 </head>
 <body>
     <header class="topbar">
         <div class="container nav">
-            <a class="brand" href="#inicio" aria-label="MAX Asesoría Empresarial Especializada, inicio"><span class="brand-lockup"><strong>MAX</strong><span>ASESORÍA EMPRESARIAL<br>ESPECIALIZADA</span></span></a>
+            <a class="brand" href="#inicio" aria-label="MAX Asesoría Empresarial Especializada, inicio"><img class="brand-logo" src="max-brand-transparent.png" alt="MAX Asesoría Empresarial Especializada"></a>
             <nav class="nav-links" aria-label="Navegación principal">
                 <a href="#contenido" data-view="empresa" aria-current="page">Quiénes somos</a>
                 <a href="#contenido" data-view="servicios">Servicios</a>
