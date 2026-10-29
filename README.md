@@ -27,7 +27,7 @@ Sitio web en PHP 8 para recibir solicitudes desde el formulario existente, guard
    ```
 
    Guarda el resultado en `JWT_SECRET`. El panel administrativo usa una sesión independiente.
-6. Ajusta `DB_HOST`, `DB_NAME`, `DB_USER` y `DB_PASS` en `.env` según tu MySQL local. En XAMPP nuevo, la cuenta `root` suele tener contraseña vacía; configura una contraseña en MySQL para cualquier entorno compartido o publicado.
+6. Ajusta `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER` y `DB_PASS` en `.env` según tu MySQL local. El valor predeterminado es el puerto `3306`; en esta instalación local de XAMPP MariaDB escucha en `3308`. En XAMPP nuevo, la cuenta `root` suele tener contraseña vacía; configura una contraseña en MySQL para cualquier entorno compartido o publicado.
 7. Abre `http://localhost/max/`. El panel está en `http://localhost/max/admin`.
 
 El sitio usa `/MAX` en las reglas del `.htaccess` raíz. Si cambias el nombre de la carpeta, actualiza esas reglas.

@@ -18,10 +18,16 @@ final class Database
         }
 
         $host = (string) Config::get('DB_HOST', '127.0.0.1');
+        $port = (int) Config::get('DB_PORT', '3306');
         $database = (string) Config::get('DB_NAME', 'sistema_web');
         $username = (string) Config::get('DB_USER', 'root');
         $password = (string) Config::get('DB_PASS', '');
-        $dsn = sprintf('mysql:host=%s;dbname=%s;charset=utf8mb4', $host, $database);
+
+        if ($port < 1 || $port > 65535) {
+            throw new PDOException('Database port configuration is invalid.');
+        }
+
+        $dsn = sprintf('mysql:host=%s;port=%d;dbname=%s;charset=utf8mb4', $host, $port, $database);
 
         try {
             self::$connection = new PDO($dsn, $username, $password, [
