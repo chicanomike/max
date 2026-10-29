@@ -36,20 +36,23 @@ $router->add('GET', '/', static function (): void {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#0056B3">
+    <meta name="theme-color" content="#E9DFC9">
     <meta name="description" content="MAX Asesoría Empresarial Especializada. Asesoría, programas internos, capacitación y dictámenes técnicos.">
     <title>MAX | Asesoría Empresarial Especializada</title>
     <style>
         :root {
             color-scheme: light;
-            --blue: #0056B3;
-            --red: #D62828;
-            --yellow: #FFC107;
+            --beige: #E9DFC9;
+            --accent-blue: #245B78;
+            --black: #171717;
             --white: #FFFFFF;
-            --ink: var(--blue);
-            --muted: var(--blue);
+            --blue: var(--beige);
+            --red: var(--white);
+            --yellow: var(--accent-blue);
+            --ink: var(--black);
+            --muted: var(--black);
             --paper: var(--white);
-            --line: var(--yellow);
+            --line: var(--accent-blue);
             --serif: Georgia, "Times New Roman", serif;
             --sans: "Segoe UI", Tahoma, sans-serif;
         }
@@ -74,7 +77,7 @@ $router->add('GET', '/', static function (): void {
             backdrop-filter: blur(14px);
         }
         .nav { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
-        .brand { display: inline-flex; align-items: center; }
+        .brand { display: inline-flex; align-items: center; padding: 4px 8px; border-radius: 4px; background: var(--accent-blue); }
         .brand-logo { display: block; width: 190px; max-width: 32vw; height: auto; border-radius: 4px; object-fit: contain; }
         .nav-links { display: flex; align-items: center; gap: 28px; color: var(--blue); font-size: .9rem; }
         .nav-links a { transition: color .2s ease; }
@@ -400,58 +403,62 @@ $router->add('GET', '/', static function (): void {
             .compact-footer { grid-template-columns: 1fr; }
             .compact-footer nav { justify-content: start; }
         }
-        html, body { background: var(--white); color: var(--blue); }
-        body { --ink: var(--blue); --muted: var(--blue); --paper: var(--white); --line: var(--yellow); }
-        ::placeholder { color: var(--blue); opacity: 1; }
-        ::selection { background: var(--blue); color: var(--white); }
-        .topbar { background: var(--blue); border-bottom: 2px solid var(--yellow); }
-        .nav-links { color: var(--white); }
-        .nav-links a:hover, .nav-links a[aria-current="page"], .topbar .nav-links a.is-active { color: var(--yellow); }
-        .nav-contact, .btn-primary, .lead-form button { background: var(--red); border-color: var(--red); color: var(--white); }
-        .nav-contact:hover, .btn-primary:hover, .lead-form button:hover:not(:disabled) { background: var(--blue); border-color: var(--blue); color: var(--white); }
-        .btn-secondary { background: var(--white); border-color: var(--yellow); color: var(--blue); }
-        .btn-secondary:hover { background: var(--yellow); border-color: var(--yellow); color: var(--blue); }
+        html, body { background: var(--white); color: var(--black); }
+        body { --ink: var(--black); --muted: var(--black); --paper: var(--white); --line: var(--accent-blue); }
+        h1, h2, h3, .eyebrow, .about-note, .contact-item span { color: var(--black); }
+        h1 em { color: var(--black); }
+        ::placeholder { color: var(--black); opacity: .65; }
+        ::selection { background: var(--accent-blue); color: var(--white); }
+        .topbar { background: var(--beige); border-bottom: 2px solid var(--accent-blue); }
+        .nav-links { color: var(--black); }
+        .nav-links a:hover, .nav-links a[aria-current="page"], .topbar .nav-links a.is-active { color: var(--black); }
+        .nav-contact, .btn-primary, .lead-form button { background: var(--white); border-color: var(--accent-blue); color: var(--black); }
+        .nav-contact:hover, .btn-primary:hover, .lead-form button:hover:not(:disabled) { background: var(--accent-blue); border-color: var(--accent-blue); color: var(--white); }
+        .btn-secondary { background: var(--white); border-color: var(--accent-blue); color: var(--black); }
+        .btn-secondary:hover { background: var(--accent-blue); border-color: var(--accent-blue); color: var(--white); }
         .stage, .hero-copy, .info-explorer, .trust-band, .footer { background: var(--white); }
-        .info-panel { margin: 0 0 10px; padding: 16px; border: 1px solid var(--yellow); border-radius: 8px; background: var(--white); }
-        #panel-servicios { background: var(--blue); }
-        #panel-servicios h2 { color: var(--white); }
-        #panel-servicios .service-number { color: var(--red); }
-        #panel-metodo { background: var(--red); }
-        #panel-metodo h2 { color: var(--white); }
-        #panel-metodo .process-step { background: var(--blue); }
-        #panel-metodo .process-step h3, #panel-metodo .process-step p, #panel-metodo .process-step::before { color: var(--white); }
-        .services-section { background: var(--blue); }
-        .service, .proof-item, .process-step, .mission-note { background: var(--white); border-color: var(--yellow); }
-        .service h3, .proof-item strong, .mission-note { color: var(--blue); }
-        .service p, .proof-item span, .process-step p { color: var(--blue); }
-        .service:hover { background: var(--yellow); }
-        .contact-panel { background: var(--blue); border: 2px solid var(--yellow); box-shadow: 0 8px 20px var(--blue); }
-        .contact-panel h2, .contact-panel h3, .contact-panel p, .contact-panel .eyebrow { color: var(--white); }
-        .contact-panel .eyebrow::before { background: var(--yellow); }
-        .lead-form { background: var(--white); border: 1px solid var(--yellow); }
+        .info-panel { margin: 0 0 10px; padding: 16px; border: 1px solid var(--accent-blue); border-radius: 8px; background: var(--white); }
+        #panel-servicios { background: var(--beige); }
+        #panel-servicios h2 { color: var(--black); }
+        #panel-servicios .service-number { color: var(--black); }
+        #panel-metodo { background: var(--white); }
+        #panel-metodo h2 { color: var(--black); }
+        #panel-metodo .process-step { background: var(--beige); }
+        #panel-metodo .process-step h3, #panel-metodo .process-step p, #panel-metodo .process-step::before { color: var(--black); }
+        .services-section { background: var(--beige); }
+        .service, .proof-item, .process-step, .mission-note { background: var(--white); border-color: var(--accent-blue); }
+        .service h3, .proof-item strong, .mission-note { color: var(--black); }
+        .service p, .proof-item span, .process-step p { color: var(--black); }
+        .service:hover { background: var(--accent-blue); }
+        .service:hover h3, .service:hover p, .service:hover .service-number { color: var(--white); }
+        .contact-panel { background: var(--beige); border: 2px solid var(--accent-blue); box-shadow: 0 8px 20px rgba(36, 91, 120, .18); color: var(--black); }
+        .contact-panel h2, .contact-panel h3, .contact-panel p, .contact-panel .eyebrow { color: var(--black); }
+        .contact-panel .eyebrow::before { background: var(--accent-blue); }
+        .lead-form { background: var(--white); border: 1px solid var(--accent-blue); color: var(--black); }
         .lead-form input, .lead-form select, .lead-form textarea {
-            border-color: var(--yellow);
+            border-color: var(--accent-blue);
             background: var(--white);
-            color: var(--blue);
-            -webkit-text-fill-color: var(--blue);
+            color: var(--black);
+            -webkit-text-fill-color: var(--black);
         }
-        .lead-form label { color: var(--blue); }
-        .lead-form input:focus, .lead-form select:focus, .lead-form textarea:focus { border-color: var(--blue); outline-color: var(--yellow); }
-        .lead-form option { background: var(--white); color: var(--blue); }
-        .form-feedback { border-color: var(--yellow); background: var(--blue); color: var(--white); }
-        .form-feedback.is-error { border-color: var(--red); background: var(--red); color: var(--white); }
-        .contact-checks, .contact-checks a, .contact-layout .sample-note { color: var(--white) !important; }
-        .contact-item, .compact-footer { border-color: var(--yellow); }
-        .view-tab { color: var(--blue); }
-        .view-tab:hover, .view-tab[aria-selected="true"] { border-bottom-color: var(--red); color: var(--red); }
-        .hero-visual { border: 2px solid var(--yellow); }
-        .visual-shade { background: var(--blue); opacity: .55; }
-        .visual-label, .visual-label span, .status { color: var(--white); }
-        .status { border-color: var(--yellow); background: var(--blue); }
-        .status::before { background: var(--yellow); }
-        .trust-points span::before, .process-step::before, .service-number { color: var(--red); }
-        .eyebrow::before { background: var(--yellow); }
-        :focus-visible { outline: 3px solid var(--yellow); outline-offset: 3px; }
+        .lead-form label { color: var(--black); }
+        .lead-form input:focus, .lead-form select:focus, .lead-form textarea:focus { border-color: var(--accent-blue); outline-color: var(--accent-blue); }
+        .lead-form option { background: var(--white); color: var(--black); }
+        .form-feedback { border-color: var(--accent-blue); background: var(--accent-blue); color: var(--white); }
+        .form-feedback.is-error { border-color: var(--accent-blue); background: var(--white); color: var(--black); }
+        .contact-checks, .contact-checks a, .contact-layout .sample-note { color: var(--black) !important; }
+        .contact-item, .compact-footer { border-color: var(--accent-blue); }
+        .compact-footer { color: var(--black); }
+        .view-tab { color: var(--black); }
+        .view-tab:hover, .view-tab[aria-selected="true"] { border-bottom-color: var(--accent-blue); color: var(--black); }
+        .hero-visual { border: 2px solid var(--accent-blue); }
+        .visual-shade { background: var(--beige); opacity: .55; }
+        .visual-label, .visual-label span, .status { color: var(--black); }
+        .status { border-color: var(--accent-blue); background: var(--beige); }
+        .status::before { background: var(--accent-blue); }
+        .trust-points span::before, .process-step::before, .service-number { color: var(--black); }
+        .eyebrow::before { background: var(--accent-blue); }
+        :focus-visible { outline: 3px solid var(--accent-blue); outline-offset: 3px; }
         @media (max-width: 520px) {
             .brand-logo { width: 165px; max-width: 48vw; }
         }
@@ -540,7 +547,7 @@ $router->add('GET', '/', static function (): void {
                             <div class="eyebrow">Asesoría especializada</div>
                             <h3>Conversemos sobre lo que necesita tu empresa.</h3>
                             <p>Contacta a MAX para recibir información sobre asesorías, programas, capacitación y dictámenes.</p>
-                            <div class="contact-checks"><a href="tel:+529612333442">961 233 3442</a><a href="mailto:programas.internos.max@gmail.com">programas.internos.max@gmail.com</a></div>
+                            <div class="contact-checks"><a href="tel:+529612333442">961 233 3442</a><a href="mailto:programas.internos.max@gmail.com">programas.internos.max@gmail.com</a><a href="https://maps.app.goo.gl/Bw2xrPNf1RHzSana7" target="_blank" rel="noopener noreferrer">Cómo llegar</a></div>
                         </div>
                         <div class="contact-layout">
                             <form class="lead-form" action="solicitudes" method="post" data-request-form>
