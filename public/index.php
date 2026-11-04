@@ -446,13 +446,15 @@ $router->add('GET', '/', static function (): void {
         .lead-form option { background: var(--white); color: var(--black); }
         .form-feedback { border-color: var(--accent-blue); background: var(--accent-blue); color: var(--white); }
         .form-feedback.is-error { border-color: var(--accent-blue); background: var(--white); color: var(--black); }
+        .contact-panel .form-feedback { color: var(--white); }
+        .contact-panel .form-feedback.is-error { color: var(--black); }
         .contact-checks, .contact-checks a, .contact-layout .sample-note { color: var(--black) !important; }
         .contact-item, .compact-footer { border-color: var(--accent-blue); }
         .compact-footer { color: var(--black); }
         .view-tab { color: var(--black); }
         .view-tab:hover, .view-tab[aria-selected="true"] { border-bottom-color: var(--accent-blue); color: var(--black); }
         .hero-visual { border: 2px solid var(--accent-blue); }
-        .visual-shade { background: var(--beige); opacity: .55; }
+        .visual-shade { background: var(--beige); opacity: 0; }
         .visual-label, .visual-label span, .status { color: var(--black); }
         .status { border-color: var(--accent-blue); background: var(--beige); }
         .status::before { background: var(--accent-blue); }
@@ -547,7 +549,7 @@ $router->add('GET', '/', static function (): void {
                             <div class="eyebrow">Asesoría especializada</div>
                             <h3>Conversemos sobre lo que necesita tu empresa.</h3>
                             <p>Contacta a MAX para recibir información sobre asesorías, programas, capacitación y dictámenes.</p>
-                            <div class="contact-checks"><a href="tel:+529612333442">961 233 3442</a><a href="mailto:programas.internos.max@gmail.com">programas.internos.max@gmail.com</a><a href="https://maps.app.goo.gl/Bw2xrPNf1RHzSana7" target="_blank" rel="noopener noreferrer">Cómo llegar</a></div>
+                            <div class="contact-checks"><a href="https://wa.me/529612333442" target="_blank" rel="noopener noreferrer">961 233 3442</a><a href="mailto:programas.internos.max@gmail.com">programas.internos.max@gmail.com</a><a href="https://maps.app.goo.gl/Bw2xrPNf1RHzSana7" target="_blank" rel="noopener noreferrer">Cómo llegar</a></div>
                         </div>
                         <div class="contact-layout">
                             <form class="lead-form" action="solicitudes" method="post" data-request-form>
@@ -640,7 +642,7 @@ $router->add('GET', '/', static function (): void {
                 status: 'Protección civil empresarial',
             },
             servicios: {
-                image: 'fire-drill-training.jpg',
+                image: 'services-training.jpg',
                 alt: 'Bomberos realizan un ejercicio de extinción de fuego con mangueras',
                 title: 'Capacitación en respuesta.',
                 description: 'Brigadas · incendios · extintores',
