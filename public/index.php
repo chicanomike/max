@@ -77,7 +77,7 @@ $router->add('GET', '/', static function (): void {
             backdrop-filter: blur(14px);
         }
         .nav { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
-        .brand { display: inline-flex; align-items: center; padding: 4px 8px; border-radius: 4px; background: var(--accent-blue); }
+        .brand { display: inline-flex; align-items: center; padding: 4px 8px; border-radius: 4px; background: transparent; }
         .brand-logo { display: block; width: 190px; max-width: 32vw; height: auto; border-radius: 4px; object-fit: contain; }
         .nav-links { display: flex; align-items: center; gap: 28px; color: var(--blue); font-size: .9rem; }
         .nav-links a { transition: color .2s ease; }
@@ -360,8 +360,11 @@ $router->add('GET', '/', static function (): void {
         .contact-panel { display: grid; grid-template-columns: .85fr 1.15fr; gap: 18px; max-width: 1000px; margin: 0 auto; padding: 18px; border-radius: 8px; background: var(--blue); color: var(--white); text-align: left; }
         .contact-intro h3 { margin: 9px 0; font-family: var(--serif); font-size: 1.55rem; font-weight: 400; line-height: 1.12; }
         .contact-intro p { color: var(--white); font-size: .78rem; line-height: 1.5; }
-        .contact-checks { display: grid; gap: 7px; margin: 12px 0 0; color: var(--white); font-size: .69rem; }
-        .contact-checks a { color: var(--yellow); font-weight: 700; overflow-wrap: anywhere; }
+        .contact-checks { display: grid; gap: 9px; margin: 12px 0 0; }
+        .contact-checks a { display: flex; width: 100%; min-height: 44px; align-items: center; justify-content: flex-start; gap: 11px; padding: 10px 14px; border: 1px solid var(--accent-blue); border-radius: 9px; background: var(--white); box-shadow: 0 3px 10px rgba(36, 91, 120, .12); color: var(--black); font-size: .72rem; font-weight: 700; line-height: 1.35; text-align: left; text-decoration: none; overflow-wrap: anywhere; transition: background-color .2s ease, color .2s ease, box-shadow .2s ease, transform .2s ease; }
+        .contact-checks a:hover { transform: translateY(-2px); background: var(--accent-blue); box-shadow: 0 6px 14px rgba(36, 91, 120, .2); color: var(--white); }
+        .contact-checks a:focus-visible { outline: 3px solid var(--accent-blue); outline-offset: 3px; }
+        .contact-checks svg { width: 18px; height: 18px; flex: 0 0 18px; }
         .contact-layout { min-width: 0; }
         .lead-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; padding: 12px; border-radius: 7px; background: var(--white); color: var(--blue); }
         .lead-form label { display: grid; gap: 4px; color: var(--muted); font-size: .64rem; font-weight: 700; }
@@ -398,7 +401,8 @@ $router->add('GET', '/', static function (): void {
             .contact-panel { grid-template-columns: 1fr; gap: 10px; padding: 12px; }
             .contact-intro h3 { font-size: 1.3rem; }
             .contact-intro p { margin-bottom: 5px; }
-            .contact-checks { grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 7px; font-size: .62rem; }
+            .contact-checks { grid-template-columns: 1fr; gap: 7px; margin-top: 7px; }
+            .contact-checks a { min-height: 42px; padding: 9px 12px; font-size: .69rem; }
             .lead-form { gap: 6px; padding: 9px; }
             .compact-footer { grid-template-columns: 1fr; }
             .compact-footer nav { justify-content: start; }
@@ -445,14 +449,17 @@ $router->add('GET', '/', static function (): void {
         .lead-form input:focus, .lead-form select:focus, .lead-form textarea:focus { border-color: var(--accent-blue); outline-color: var(--accent-blue); }
         .lead-form option { background: var(--white); color: var(--black); }
         .form-feedback { border-color: var(--accent-blue); background: var(--accent-blue); color: var(--white); }
+        .form-feedback:not(.is-error) { background: var(--beige); color: #000000; }
         .form-feedback.is-error { border-color: var(--accent-blue); background: var(--white); color: var(--black); }
-        .contact-checks, .contact-checks a, .contact-layout .sample-note { color: var(--black) !important; }
+        .contact-checks, .contact-layout .sample-note { color: var(--black) !important; }
         .contact-item, .compact-footer { border-color: var(--accent-blue); }
         .compact-footer { color: var(--black); }
+        .mascot-corner { display: flex; justify-content: flex-end; margin-top: 10px; }
+        .mascot-corner img { display: block; width: auto; height: 94px; max-width: 24vw; object-fit: contain; filter: drop-shadow(0 5px 7px rgba(0, 0, 0, .16)); }
         .view-tab { color: var(--black); }
         .view-tab:hover, .view-tab[aria-selected="true"] { border-bottom-color: var(--accent-blue); color: var(--black); }
         .hero-visual { border: 2px solid var(--accent-blue); }
-        .visual-shade { background: var(--beige); opacity: .55; }
+        .visual-shade { display: none; }
         .visual-label, .visual-label span, .status { color: var(--black); }
         .status { border-color: var(--accent-blue); background: var(--beige); }
         .status::before { background: var(--accent-blue); }
@@ -461,6 +468,7 @@ $router->add('GET', '/', static function (): void {
         :focus-visible { outline: 3px solid var(--accent-blue); outline-offset: 3px; }
         @media (max-width: 520px) {
             .brand-logo { width: 165px; max-width: 48vw; }
+            .mascot-corner img { height: 72px; max-width: 30vw; }
         }
     </style>
 </head>
@@ -509,6 +517,7 @@ $router->add('GET', '/', static function (): void {
                         <div class="proof-item"><strong>Misión</strong><span>Ayudar a las organizaciones a prevenir riesgos y proteger a las personas mediante asesoría especializada, capacitación y soluciones responsables.</span></div>
                         <div class="proof-item"><strong>Visión</strong><span>Ser una firma confiable y reconocida por su profesionalismo, claridad técnica y compromiso con la seguridad.</span></div>
                     </div>
+                    <div class="mascot-corner"><img src="max-parrot.png" alt="" aria-hidden="true" loading="lazy" decoding="async"></div>
                 </section>
                 <section class="info-panel" id="panel-servicios" data-panel="servicios" hidden>
                     <template data-hero>
@@ -525,6 +534,7 @@ $router->add('GET', '/', static function (): void {
                         <article class="service"><span class="service-number">07 / FORMACIÓN</span><h3>Manejo de ambulancia</h3><p>Curso de manejo de ambulancia con certificación.</p></article>
                         <article class="service"><span class="service-number">08 / PERITAJE</span><h3>Firma pericial</h3><p>Servicios de firma pericial para documentación y dictámenes técnicos.</p></article>
                     </div>
+                    <div class="mascot-corner"><img src="max-parrot.png" alt="" aria-hidden="true" loading="lazy" decoding="async"></div>
                 </section>
                 <section class="info-panel" id="panel-metodo" data-panel="metodo" hidden>
                     <template data-hero>
@@ -537,6 +547,7 @@ $router->add('GET', '/', static function (): void {
                         <article class="process-step"><h3>Propuesta y documentación</h3><p>Preparamos medidas y documentos con criterios técnicos claros.</p></article>
                         <article class="process-step"><h3>Acompañamiento</h3><p>Orientamos sobre la atención de requisitos y siguientes pasos.</p></article>
                     </div>
+                    <div class="mascot-corner"><img src="max-parrot.png" alt="" aria-hidden="true" loading="lazy" decoding="async"></div>
                 </section>
                 <section class="info-panel" id="panel-contacto" data-panel="contacto" hidden>
                     <template data-hero>
@@ -547,7 +558,7 @@ $router->add('GET', '/', static function (): void {
                             <div class="eyebrow">Asesoría especializada</div>
                             <h3>Conversemos sobre lo que necesita tu empresa.</h3>
                             <p>Contacta a MAX para recibir información sobre asesorías, programas, capacitación y dictámenes.</p>
-                            <div class="contact-checks"><a href="tel:+529612333442">961 233 3442</a><a href="mailto:programas.internos.max@gmail.com">programas.internos.max@gmail.com</a><a href="https://maps.app.goo.gl/Bw2xrPNf1RHzSana7" target="_blank" rel="noopener noreferrer">Cómo llegar</a></div>
+                            <div class="contact-checks"><a href="https://wa.me/529612333442" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20l1.2-4.9A8.4 8.4 0 1 1 20.5 11.5Z"/><path d="M8.8 8.5c.3-.6.6-.6.9-.6h.5c.2 0 .4.1.5.4l.7 1.6c.1.2.1.4 0 .6l-.5.6c-.2.2-.2.4-.1.6.4.8 1.1 1.5 1.9 1.9.2.1.4.1.6-.1l.6-.5c.2-.2.4-.2.6-.1l1.6.7c.3.1.4.3.4.5v.5c0 .3 0 .6-.6.9-.6.3-1.6.4-2.7 0-1.1-.4-2.3-1.2-3.3-2.2-1-1-1.8-2.2-2.2-3.3-.4-1.1-.3-2.1 0-2.7Z"/></svg>961 233 3442</a><a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=programas.internos.max@gmail.com" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>programas.internos.max@gmail.com</a><a href="https://maps.app.goo.gl/Bw2xrPNf1RHzSana7" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>Cómo llegar</a></div>
                         </div>
                         <div class="contact-layout">
                             <form class="lead-form" action="solicitudes" method="post" data-request-form>
@@ -563,6 +574,7 @@ $router->add('GET', '/', static function (): void {
                             </form>
                         </div>
                     </div>
+                    <div class="mascot-corner"><img src="max-parrot.png" alt="" aria-hidden="true" loading="lazy" decoding="async"></div>
                     <footer class="compact-footer">
                         <p><strong>MAX</strong> · Asesoría Empresarial Especializada<br>Prevención, seguridad y confianza.</p>
                         <nav aria-label="Navegación del pie de página">
@@ -612,8 +624,8 @@ $router->add('GET', '/', static function (): void {
                 requestForm.reset();
                 requestForm.elements.submission_key.value = result.submission_key;
                 feedback.textContent = result.whatsapp_status === 'enviado'
-                    ? `Solicitud #${String(result.id).padStart(3, '0')} registrada. La notificación fue enviada.`
-                    : `Solicitud #${String(result.id).padStart(3, '0')} registrada. La notificación de WhatsApp está pendiente y podrá reintentarse desde administración.`;
+                    ? 'Solicitud registrada. La notificación fue enviada.'
+                    : 'Solicitud registrada. La notificación de WhatsApp está pendiente y podrá reintentarse desde administración.';
                 feedback.hidden = false;
             } catch (error) {
                 feedback.textContent = error.message || 'No fue posible enviar la solicitud. Inténtalo de nuevo.';

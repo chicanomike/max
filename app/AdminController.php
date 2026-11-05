@@ -97,7 +97,7 @@ final class AdminController
             <button class="button primary" type="submit">Filtrar</button>
         </form>
         <div class="table-wrap"><table>
-            <thead><tr><th>Solicitud</th><th>Cliente</th><th>Servicio / descripción</th><th>Registro</th><th>Estado</th><th>WhatsApp</th><th>Acciones</th></tr></thead>
+            <thead><tr><th>Solicitud</th><th>Cliente</th><th>Servicio / descripción</th><th>Registro</th><th>Estado</th><th>WhatsApp</th><th>Correo</th><th>Acciones</th></tr></thead>
             <tbody>__ROWS__</tbody>
         </table></div>
         <p class="count">__COUNT__ solicitudes mostradas.</p>
@@ -136,7 +136,9 @@ HTML;
                 $statusOptions .= '<option value="' . $value . '"' . $selected . '>' . $label . '</option>';
             }
             $error = $request['whatsapp_error'] === null ? '' : '<div class="whatsapp-error">' . self::escape($request['whatsapp_error']) . '</div>';
-            $retryForm = $request['whatsapp_estado'] === 'enviado' ? '' : '<form method="post" action="admin-retry" data-confirm-retry><input type="hidden" name="csrf_token" value="' . $csrf . '"><input type="hidden" name="id" value="' . $id . '"><button class="button" type="submit">Reintentar WhatsApp</button></form>';
+            $emailError = $request['email_error'] === null ? '' : '<div class="whatsapp-error">' . self::escape($request['email_error']) . '</div>';
+            $whatsAppRetryForm = $request['whatsapp_estado'] === 'enviado' ? '' : '<form method="post" action="admin-retry" data-confirm-retry><input type="hidden" name="csrf_token" value="' . $csrf . '"><input type="hidden" name="id" value="' . $id . '"><input type="hidden" name="channel" value="whatsapp"><button class="button" type="submit">Reintentar WhatsApp</button></form>';
+            $emailRetryForm = $request['email_estado'] === 'enviado' ? '' : '<form method="post" action="admin-retry" data-confirm-retry><input type="hidden" name="csrf_token" value="' . $csrf . '"><input type="hidden" name="id" value="' . $id . '"><input type="hidden" name="channel" value="email"><button class="button" type="submit">Reintentar correo</button></form>';
             $rows .= '<tr>'
                 . '<td><span class="request-id">' . $requestNumber . '</span></td>'
                 . '<td><strong>' . self::escape($request['nombre']) . '</strong><br>' . self::escape($request['telefono']) . '<br><a href="mailto:' . self::escape($request['correo']) . '">' . self::escape($request['correo']) . '</a></td>'
@@ -144,11 +146,12 @@ HTML;
                 . '<td>' . self::escape(date('d/m/Y H:i', strtotime($request['fecha_registro']))) . '</td>'
                 . '<td><form class="state-form" method="post" action="admin-status"><input type="hidden" name="csrf_token" value="' . $csrf . '"><input type="hidden" name="id" value="' . $id . '"><select name="estado" aria-label="Estado de ' . $requestNumber . '">' . $statusOptions . '</select><button class="button" type="submit">Guardar</button></form></td>'
                 . '<td>' . self::escape(ucfirst($request['whatsapp_estado'])) . '<div class="subtle">Intentos: ' . (int) $request['whatsapp_intentos'] . '</div>' . $error . '</td>'
-                . '<td><div class="actions">' . $retryForm . '<form method="post" action="admin-delete" data-confirm-delete><input type="hidden" name="csrf_token" value="' . $csrf . '"><input type="hidden" name="id" value="' . $id . '"><input type="hidden" name="confirmed" value="0"><button class="button danger" type="submit">Eliminar</button></form></div></td>'
+                . '<td>' . self::escape(ucfirst($request['email_estado'])) . '<div class="subtle">Intentos: ' . (int) $request['email_intentos'] . '</div>' . $emailError . '</td>'
+                . '<td><div class="actions">' . $whatsAppRetryForm . $emailRetryForm . '<form method="post" action="admin-delete" data-confirm-delete><input type="hidden" name="csrf_token" value="' . $csrf . '"><input type="hidden" name="id" value="' . $id . '"><input type="hidden" name="confirmed" value="0"><button class="button danger" type="submit">Eliminar</button></form></div></td>'
                 . '</tr>';
         }
         if ($rows === '') {
-            $rows = '<tr><td class="empty" colspan="7">No hay solicitudes para estos filtros.</td></tr>';
+            $rows = '<tr><td class="empty" colspan="8">No hay solicitudes para estos filtros.</td></tr>';
         }
 
         $html = str_replace(
@@ -239,7 +242,8 @@ HTML;
         $this->requireAdmin();
         $this->requireCsrf();
         $id = filter_var($_POST['id'] ?? null, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
-        if ($id === false) {
+        $channel = (string) ($_POST['channel'] ?? 'whatsapp');
+        if ($id === false || !in_array($channel, ['whatsapp', 'email'], true)) {
             $this->flashAndRedirect('Solicitud no válida.');
         }
 
@@ -249,18 +253,36 @@ HTML;
             if ($request === null) {
                 $this->flashAndRedirect('No se encontró la solicitud.');
             }
-            if ($request['whatsapp_estado'] === 'enviado') {
+            $isWhatsApp = $channel === 'whatsapp';
+            $statusKey = $isWhatsApp ? 'whatsapp_estado' : 'email_estado';
+            if ($request[$statusKey] === 'enviado') {
                 $this->flashAndRedirect('La notificación ya fue enviada.');
             }
 
-            $delivery = (new WhatsAppCloudApi())->sendRequest($request);
-            $repository->markWhatsAppResult((int) $id, $delivery['sent'], $delivery['error']);
-            if (!$delivery['sent']) {
-                error_log('WhatsApp retry for request #' . $id . ' failed: ' . $delivery['error']);
+            try {
+                $delivery = $isWhatsApp
+                    ? (new WhatsAppCloudApi())->sendRequest($request)
+                    : (new EmailNotification())->sendRequest($request);
+            } catch (Throwable $exception) {
+                error_log(ucfirst($channel) . ' retry for request #' . $id . ' failed: ' . $exception->getMessage());
+                $delivery = [
+                    'sent' => false,
+                    'error' => $isWhatsApp
+                        ? 'No fue posible realizar el envío de WhatsApp.'
+                        : 'No fue posible realizar el envío de correo.',
+                ];
             }
-            $this->flashAndRedirect($delivery['sent'] ? 'Notificación enviada.' : 'El envío sigue pendiente; revisa la configuración de WhatsApp.');
+            if ($isWhatsApp) {
+                $repository->markWhatsAppResult((int) $id, $delivery['sent'], $delivery['error']);
+            } else {
+                $repository->markEmailResult((int) $id, $delivery['sent'], $delivery['error']);
+            }
+            if (!$delivery['sent']) {
+                error_log(ucfirst($channel) . ' retry for request #' . $id . ' failed: ' . $delivery['error']);
+            }
+            $this->flashAndRedirect($delivery['sent'] ? 'Notificación enviada.' : 'El envío sigue pendiente; revisa la configuración del servicio.');
         } catch (Throwable $exception) {
-            error_log('Unable to retry WhatsApp notification: ' . $exception->getMessage());
+            error_log('Unable to retry ' . $channel . ' notification: ' . $exception->getMessage());
             $this->flashAndRedirect('No se pudo reintentar la notificación.');
         }
     }

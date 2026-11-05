@@ -73,6 +73,24 @@ final class SubmissionRepository
         ]);
     }
 
+    public function markEmailResult(int $id, bool $sent, ?string $error): void
+    {
+        $statement = $this->database->prepare(
+            'UPDATE solicitudes
+             SET email_estado = :estado,
+                 email_error = :error,
+                 email_intentos = email_intentos + 1,
+                 email_actualizado_en = :actualizado
+             WHERE id = :id'
+        );
+        $statement->execute([
+            'estado' => $sent ? 'enviado' : 'error',
+            'error' => $error,
+            'actualizado' => date('Y-m-d H:i:s'),
+            'id' => $id,
+        ]);
+    }
+
     public function search(array $filters): array
     {
         $conditions = [];

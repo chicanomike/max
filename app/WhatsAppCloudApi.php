@@ -24,17 +24,12 @@ final class WhatsAppCloudApi
             return ['sent' => false, 'error' => 'La integración de WhatsApp no está configurada completamente.'];
         }
 
-        $description = function_exists('mb_substr')
-            ? mb_substr((string) $request['descripcion'], 0, 900, 'UTF-8')
-            : substr((string) $request['descripcion'], 0, 900);
         $parameters = [
-            sprintf('#%03d', (int) $request['id']),
             (string) $request['nombre'],
+            (string) $request['servicio'],
+            date('d/m/Y H:i', strtotime((string) $request['fecha_registro'])),
             (string) $request['telefono'],
             (string) $request['correo'],
-            (string) $request['servicio'],
-            $description,
-            date('d/m/Y H:i', strtotime((string) $request['fecha_registro'])),
         ];
         $payload = [
             'messaging_product' => 'whatsapp',

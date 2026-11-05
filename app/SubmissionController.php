@@ -73,12 +73,38 @@ final class SubmissionController
             $request = $result['request'];
 
             if ($result['created']) {
-                $delivery = (new WhatsAppCloudApi())->sendRequest($request);
-                $repository->markWhatsAppResult((int) $request['id'], $delivery['sent'], $delivery['error']);
-                if (!$delivery['sent']) {
-                    error_log('WhatsApp notification for request #' . $request['id'] . ' failed: ' . $delivery['error']);
+                $id = (int) $request['id'];
+                try {
+                    $whatsAppDelivery = (new WhatsAppCloudApi())->sendRequest($request);
+                } catch (Throwable $exception) {
+                    error_log('WhatsApp notification for request #' . $id . ' failed: ' . $exception->getMessage());
+                    $whatsAppDelivery = ['sent' => false, 'error' => 'No fue posible realizar el envío de WhatsApp.'];
                 }
-                $request = $repository->find((int) $request['id']) ?? $request;
+
+                try {
+                    $emailDelivery = (new EmailNotification())->sendRequest($request);
+                } catch (Throwable $exception) {
+                    error_log('Email notification for request #' . $id . ' failed: ' . $exception->getMessage());
+                    $emailDelivery = ['sent' => false, 'error' => 'No fue posible realizar el envío de correo.'];
+                }
+
+                try {
+                    $repository->markWhatsAppResult($id, $whatsAppDelivery['sent'], $whatsAppDelivery['error']);
+                } catch (Throwable $exception) {
+                    error_log('Unable to save WhatsApp notification result for request #' . $id . ': ' . $exception->getMessage());
+                }
+                if (!$whatsAppDelivery['sent']) {
+                    error_log('WhatsApp notification for request #' . $id . ' failed: ' . $whatsAppDelivery['error']);
+                }
+
+                try {
+                    $repository->markEmailResult($id, $emailDelivery['sent'], $emailDelivery['error']);
+                } catch (Throwable $exception) {
+                    error_log('Unable to save email notification result for request #' . $id . ': ' . $exception->getMessage());
+                }
+                if (!$emailDelivery['sent']) {
+                    error_log('Email notification for request #' . $id . ' failed: ' . $emailDelivery['error']);
+                }
             }
 
             Response::json([
