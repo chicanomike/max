@@ -103,11 +103,6 @@ $router->add('GET', '/', static function (): void {
         .hero-visual { min-height: 420px; position: relative; overflow: hidden; background: var(--blue); }
         .hero-visual img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .9; }
         .visual-shade { position: absolute; inset: 0; background: var(--blue); }
-        .visual-label { position: absolute; right: 22px; bottom: 22px; left: 22px; display: flex; align-items: end; justify-content: space-between; gap: 20px; color: white; }
-        .visual-label strong { display: block; margin-bottom: 5px; font-family: var(--serif); font-size: 1.7rem; font-weight: 400; }
-        .visual-label span { color: var(--white); font-size: .83rem; }
-        .status { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 8px; padding: 9px 11px; border: 1px solid var(--yellow); border-radius: 3px; background: var(--blue); font-size: .72rem; }
-        .status::before { width: 7px; height: 7px; border-radius: 50%; content: ""; background: var(--yellow); box-shadow: 0 0 0 4px var(--blue); }
         .trust-band { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
         .trust-inner { min-height: 98px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
         .trust-inner p { max-width: 270px; margin: 0; color: var(--muted); font-size: .88rem; line-height: 1.55; }
@@ -176,9 +171,6 @@ $router->add('GET', '/', static function (): void {
             .actions { align-items: stretch; flex-direction: column; }
             .btn { width: 100%; }
             .hero-visual { min-height: 290px; }
-            .visual-label { right: 15px; bottom: 15px; left: 15px; }
-            .status { font-size: 0; }
-            .status::before { margin: 0; }
             .trust-points { display: grid; gap: 12px; }
             .services-grid, .process-grid { grid-template-columns: 1fr; }
             .service { min-height: auto; padding: 22px; }
@@ -194,14 +186,13 @@ $router->add('GET', '/', static function (): void {
         .hero { width: 100%; padding: 0; }
         .hero-grid { grid-template-columns: 1fr .9fr; gap: 46px; transition: opacity .42s ease, transform .42s cubic-bezier(.22, 1, .36, 1); }
         .hero-grid.is-changing { opacity: 0; transform: translateY(5px); }
-        .hero-copy { display: flex; align-items: center; flex-direction: column; text-align: center; }
+        .hero-copy { position: relative; display: flex; align-items: center; flex-direction: column; text-align: center; }
+        .hero-copy::before { position: absolute; top: 50%; left: clamp(-190px, -17vw, -110px); width: clamp(100px, 14vw, 160px); aspect-ratio: 1; background: url("parrot-sections.jpeg") center / contain no-repeat; content: ""; mix-blend-mode: multiply; pointer-events: none; transform: translateY(-50%); }
         .hero-copy .eyebrow { justify-content: center; }
         h1 { max-width: 610px; margin: 17px 0 13px; color: var(--blue); font-size: clamp(3rem, 5.2vw, 4.7rem); }
         .lead { max-width: 500px; margin-bottom: 20px; font-size: .98rem; line-height: 1.65; }
         .actions { justify-content: center; }
         .hero-visual { width: 100%; min-height: 0; aspect-ratio: 1.25; }
-        .visual-label { right: 18px; bottom: 18px; left: 18px; }
-        .visual-label strong { font-size: 1.5rem; }
         .info-explorer { border-top: 0; }
         .view-tabs { display: flex; justify-content: center; gap: 8px; padding-top: 12px; border-bottom: 1px solid var(--line); }
         .view-tab { min-height: 42px; padding: 0 17px; border: 0; border-bottom: 2px solid transparent; background: transparent; color: var(--muted); font: 650 .88rem var(--sans); cursor: pointer; transition: color .2s ease, border-color .2s ease; }
@@ -235,6 +226,7 @@ $router->add('GET', '/', static function (): void {
             .stage { min-height: calc(100svh - 100px); gap: 20px; padding-top: 22px; }
             .hero { padding: 0; }
             .hero-grid { grid-template-columns: 1fr .9fr; gap: 24px; }
+            .hero-copy::before { left: -62px; width: clamp(48px, 8vw, 64px); }
             h1 { font-size: clamp(2.5rem, 6vw, 3.6rem); }
             .hero-visual { min-height: 0; aspect-ratio: .95; }
             .view-content { min-height: 190px; }
@@ -246,13 +238,11 @@ $router->add('GET', '/', static function (): void {
             .stage { min-height: calc(100svh - 112px); align-content: start; gap: 15px; padding-top: 24px; padding-bottom: 16px; }
             .hero { padding: 0; }
             .hero-grid { grid-template-columns: 1fr; gap: 17px; }
+            .hero-copy::before { left: -16px; width: clamp(32px, 9vw, 40px); }
             h1 { max-width: 390px; margin: 12px 0 8px; font-size: clamp(2.65rem, 12vw, 3.35rem); }
             .lead { max-width: 390px; margin-bottom: 12px; font-size: .9rem; line-height: 1.5; }
             .actions { display: none; }
             .hero-visual { width: min(100%, 390px); aspect-ratio: 2.15; margin: 0 auto; }
-            .visual-label { right: 12px; bottom: 11px; left: 12px; }
-            .visual-label strong { margin-bottom: 2px; font-size: 1.12rem; }
-            .visual-label span { font-size: .68rem; }
             .view-tabs { justify-content: space-between; gap: 0; padding-top: 4px; }
             .view-tab { min-height: 40px; padding: 0 8px; font-size: .76rem; }
             .view-content { min-height: 190px; padding-top: 15px; }
@@ -321,7 +311,6 @@ $router->add('GET', '/', static function (): void {
             h1 { margin: 8px 0 6px; font-size: 2.45rem; }
             .lead { margin-bottom: 6px; font-size: .8rem; line-height: 1.4; }
             .hero-visual { aspect-ratio: 2.8; }
-            .visual-label { bottom: 8px; }
             .info-explorer { display: flex; min-height: 0; flex-direction: column; }
             .view-content { min-height: 0; flex: 1; overflow-y: auto; overscroll-behavior-y: auto; padding: 6px 5px 14px 0; scrollbar-color: var(--blue) transparent; scrollbar-width: thin; }
             .view-content::-webkit-scrollbar { width: 4px; }
@@ -460,9 +449,6 @@ $router->add('GET', '/', static function (): void {
         .view-tab:hover, .view-tab[aria-selected="true"] { border-bottom-color: var(--accent-blue); color: var(--black); }
         .hero-visual { border: 2px solid var(--accent-blue); }
         .visual-shade { display: none; }
-        .visual-label, .visual-label span, .status { color: var(--black); }
-        .status { border-color: var(--accent-blue); background: var(--beige); }
-        .status::before { background: var(--accent-blue); }
         .trust-points span::before, .process-step::before, .service-number { color: var(--black); }
         .eyebrow::before { background: var(--accent-blue); }
         :focus-visible { outline: 3px solid var(--accent-blue); outline-offset: 3px; }
@@ -498,7 +484,6 @@ $router->add('GET', '/', static function (): void {
                         <div class="hero-visual">
                             <img src="" alt="" loading="eager" decoding="async">
                             <div class="visual-shade" aria-hidden="true"></div>
-                            <div class="visual-label"><div><strong data-visual-title></strong><span data-visual-description></span></div><span class="status" data-visual-status></span></div>
                         </div>
                     </template>
             </div>
@@ -647,30 +632,18 @@ $router->add('GET', '/', static function (): void {
             empresa: {
                 image: 'safety-advisory.jpg',
                 alt: 'Profesionales con equipo de protección conversan durante una revisión en obra',
-                title: 'Seguridad desde el diagnóstico.',
-                description: 'Asesoría · programas · prevención',
-                status: 'Protección civil empresarial',
             },
             servicios: {
                 image: 'fire-drill-training.jpg',
                 alt: 'Bomberos realizan un ejercicio de extinción de fuego con mangueras',
-                title: 'Capacitación en respuesta.',
-                description: 'Brigadas · incendios · extintores',
-                status: 'Formación en campo',
             },
             metodo: {
                 image: 'electrical-safety-check.jpg',
                 alt: 'Técnico con chaleco de protección durante una revisión de seguridad eléctrica',
-                title: 'Cada riesgo se revisa en sitio.',
-                description: 'Instalaciones · documentación · seguimiento',
-                status: 'Evaluación técnica',
             },
             contacto: {
                 image: 'emergency-ambulance.jpg',
                 alt: 'Ambulancia de emergencia estacionada en la calle',
-                title: 'Atención preparada.',
-                description: 'Capacitación · respuesta · seguridad',
-                status: 'Manejo de ambulancia',
             },
         };
         let currentView = 'empresa';
@@ -685,10 +658,6 @@ $router->add('GET', '/', static function (): void {
 
             image.src = content.image;
             image.alt = content.alt;
-            visual.querySelector('[data-visual-title]').textContent = content.title;
-            visual.querySelector('[data-visual-description]').textContent = content.description;
-            visual.querySelector('[data-visual-status]').textContent = content.status;
-
             return visual;
         }
 
